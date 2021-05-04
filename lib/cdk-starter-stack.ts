@@ -8,14 +8,14 @@ export class CdkStarterStack extends cdk.Stack {
 
     const vpc = new ec2.Vpc(this, 'my-cdk-vpc', {
       cidr: '10.0.0.0/16',
-      natGateways: 0,
+      natGateways: 1,
       maxAzs: 3,
       subnetConfiguration: [
-        // {
-        //   name: 'private-subnet-1',
-        //   subnetType: ec2.SubnetType.PRIVATE,
-        //   cidrMask: 24,
-        // },
+        {
+          name: 'private-subnet-1',
+          subnetType: ec2.SubnetType.PRIVATE,
+          cidrMask: 24,
+        },
         {
           name: 'public-subnet-1',
           subnetType: ec2.SubnetType.PUBLIC,
@@ -29,9 +29,10 @@ export class CdkStarterStack extends cdk.Stack {
       ],
     });
 
+    // 👇 update the Name tag for the VPC
     cdk.Aspects.of(vpc).add(new cdk.Tag('Name', 'my-cdk-vpc'));
 
-    // 👇 replace Name tag for public subnets
+    // 👇 update the Name tag for public subnets
     for (const subnet of vpc.publicSubnets) {
       cdk.Aspects.of(subnet).add(
         new cdk.Tag(
@@ -43,7 +44,7 @@ export class CdkStarterStack extends cdk.Stack {
       );
     }
 
-    // 👇 replace Name tag for private subnets
+    // 👇 update the Name tag for private subnets
     for (const subnet of vpc.privateSubnets) {
       cdk.Aspects.of(subnet).add(
         new cdk.Tag(
@@ -55,7 +56,7 @@ export class CdkStarterStack extends cdk.Stack {
       );
     }
 
-    // 👇 replace Name tag for private subnets
+    // 👇 update the Name tag for private subnets
     for (const subnet of vpc.isolatedSubnets) {
       cdk.Aspects.of(subnet).add(
         new cdk.Tag(
